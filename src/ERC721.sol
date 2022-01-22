@@ -226,7 +226,7 @@ abstract contract ERC721 is IERC165, IERC721, IERC721Metadata {
     function _safeTransfer (address _from, address _to, uint256 _tokenId, bytes memory data) internal virtual {
         _transfer(_from, _to, _tokenId);
 
-        require(_checkOnERC721Received(_from, _to, _tokenId, data), "receipient not safe");
+        require(_checkOnERC721Received(_from, _to, _tokenId, data), "recipient not safe");
     }
 
     function transferFrom (address _from, address _to, uint256 _tokenId) public virtual override payable _exists(_tokenId) _validAddress(_to) {
@@ -252,7 +252,7 @@ abstract contract ERC721 is IERC165, IERC721, IERC721Metadata {
     function _safeMint(address _to, uint256 _tokenId, bytes memory data) internal virtual {
         _mint(_to, _tokenId);
 
-        require(_checkOnERC721Received(address(0), _to, _tokenId, data), "receipient not safe");
+        require(_checkOnERC721Received(address(0), _to, _tokenId, data), "recipient not safe");
     }
 
     function _mint(address _to, uint256 _tokenId) internal virtual _validAddress(_to) {
