@@ -168,7 +168,7 @@ abstract contract ERC721 is IERC165, IERC721, IERC721Metadata {
         return spender == _owners[tokenId] || spender == _approvals[tokenId] || _isApprovedForAll[_owners[tokenId]][spender];
     }
 
-    function ownerOf(uint256 _tokenId) public view _exists(_tokenId) returns (address) {
+    function ownerOf(uint256 _tokenId) public view returns (address) {
         return _owners[_tokenId];
     }
 
@@ -187,7 +187,7 @@ abstract contract ERC721 is IERC165, IERC721, IERC721Metadata {
         return _isApprovedForAll[_owner][_operator];
     }
 
-    function getApproved(uint256 _tokenId) public view virtual override _exists(_tokenId) returns (address) {
+    function getApproved(uint256 _tokenId) public view virtual override returns (address) {
         return _approvals[_tokenId];
     }
 
@@ -230,7 +230,7 @@ abstract contract ERC721 is IERC165, IERC721, IERC721Metadata {
     }
 
     function transferFrom (address _from, address _to, uint256 _tokenId) public virtual override payable _exists(_tokenId) _validAddress(_to) {
-        require(_isOwnerOrApproved(_from, _tokenId), "access denied");
+        require(_isOwnerOrApproved(msg.sender, _tokenId), "access denied");
 
         _transfer(_from, _to, _tokenId);
     }
@@ -240,7 +240,7 @@ abstract contract ERC721 is IERC165, IERC721, IERC721Metadata {
     }
 
     function safeTransferFrom(address _from, address _to, uint256 _tokenId, bytes memory data) public virtual override _exists(_tokenId) _validAddress(_to) {
-        require(_isOwnerOrApproved(_from, _tokenId), "access denied");
+        require(_isOwnerOrApproved(msg.sender, _tokenId), "access denied");
 
         _safeTransfer(_from, _to, _tokenId, data);
     }
