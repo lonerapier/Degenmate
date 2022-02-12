@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import { DSTest } from "ds-test/test.sol";
-import { ERC721, IERC721Receiver } from "../ERC721.sol";
+import { ERC721, IERC721Receiver } from "../ERC721/ERC721.sol";
 
 contract MockERC721 is ERC721 {
     constructor (string memory _name, string memory _symbol) ERC721(_name, _symbol) {}
