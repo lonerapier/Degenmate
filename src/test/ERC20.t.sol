@@ -4,6 +4,7 @@ pragma solidity 0.8.10;
 import { DSTest } from "ds-test/test.sol";
 import { ERC20 } from "../ERC20/ERC20.sol";
 import { Cheatcodes } from "./utils/Hevm.sol";
+import { Vm } from "forge-std/Vm.sol";
 
 contract MockERC20 is ERC20 {
     constructor(string memory name, string memory symbol, uint8 decimals) ERC20(name, symbol, decimals) {}
@@ -40,7 +41,7 @@ contract MockERC20User {
 
 
 contract ERC20Test is DSTest {
-    Cheatcodes cheat = Cheatcodes(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);
+    Vm public constant vm = Vm(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);
 
     MockERC20 token;
     address constant sampleAdd = address(0xABC);
@@ -70,7 +71,7 @@ contract ERC20Test is DSTest {
     function testBurn() public {
         token.mint(sampleAdd, 10);
 
-        cheat.prank(sampleAdd);
+        vm.prank(sampleAdd);
         token.burn(5);
 
         assertEq(token.balanceOf(sampleAdd), 5);
@@ -107,15 +108,29 @@ contract ERC20Test is DSTest {
         assertEq(token.balanceOf(sampleAdd), 5);
     }
 
-    function testFailAddressBurn() public {
+    function testFailBurnInvalidAddress() public {
         token.mint(sampleAdd, 10);
 
         token.burn(10);
     }
 
-    function testFailInsufficientBalanceBurn() public {
+    function testFailBurnInsufficientBalance() public {
         token.mint(sampleAdd, 10);
 
         token.burn(11);
+    }
+
+    function testFailTransferInsufficientBalance() public {
+        token.mint(address(this), 10);
+
+        token.transfer(sampleAdd, 11);
+    }
+
+    function testFailTransferFromInsufficientAllowance() public {
+        token.mint(address(this), 10);
+        MockERC20User user = new MockERC20User(token);
+
+        token.approve(address(user), 9);
+        user.transferFrom(address(this), sampleAdd, 10);
     }
 }
