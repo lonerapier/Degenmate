@@ -12,10 +12,12 @@ Please do not use this in **production**.
 - [ERC721Enumerable](src/ERC721/ERC721Enumerable.sol)
 - [ERC20](src/ERC20/ERC20.sol)
 - [ERC20Permit](src/ERC20/ERC20Permit.sol)
+- [RPS Game](https://github.com/dsam82/rps)
+- [UniswapV2](https://github.com/dsam82/unifap-v2)
 
 ## Future Implementations
 
-- [ ] UniswapV2
+- [x] [UniswapV2](https://github.com/dsam82/unifap-v2)
 - [ ] UniswapV3
 - [ ] Compound
 - [ ] ENS
