@@ -14,13 +14,15 @@ Please do not use this in **production**.
 - [ERC20Permit](src/ERC20/ERC20Permit.sol)
 - [RPS Game](https://github.com/dsam82/rps)
 - [UniswapV2](https://github.com/dsam82/unifap-v2)
-
+- [Simple Registry](https://github.com/dsam82/sol-tuts/blob/master/src/Registry.sol)
+- [CollateralizedVault](https://github.com/dsam82/sol-tuts/blob/master/src/CollateralizedVault.sol)
+- [MultiCollateralVault](https://github.com/dsam82/sol-tuts/blob/master/src/MultiCollateralVault.sol)
 ## Future Implementations
 
 - [x] [UniswapV2](https://github.com/dsam82/unifap-v2)
+- [x] [ENS](https://github.com/dsam82/sol-tuts/blob/master/src/Registry.sol)
 - [ ] UniswapV3
 - [ ] Compound
-- [ ] ENS
 - [ ] Superfluid
 
 ## Acknowledgments
@@ -31,5 +33,5 @@ Please do not use this in **production**.
 
 ---
 
-**Note:** This repo uses [Foundry](https://github.com/gakonst/foundry) for tests
+**Note:** This repo uses [Foundry](https://github.com/foundry-rs/foundry) for tests
 
