@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
 
-import { DSTest } from "ds-test/test.sol";
-import { ERC721, IERC721Receiver } from "../ERC721/ERC721.sol";
+import {DSTest} from "ds-test/test.sol";
+import {ERC721, IERC721Receiver} from "../ERC721/ERC721.sol";
 
 contract MockERC721 is ERC721 {
-    constructor (string memory _name, string memory _symbol) ERC721(_name, _symbol) {}
-
+    constructor(string memory _name, string memory _symbol)
+        ERC721(_name, _symbol)
+    {}
 
     function mint(address _to, uint256 _tokenId) public virtual {
         _mint(_to, _tokenId);
@@ -20,7 +21,11 @@ contract MockERC721 is ERC721 {
         _safeMint(_to, _tokenId);
     }
 
-    function safeMint(address _to, uint256 _tokenId, bytes memory data) public virtual {
+    function safeMint(
+        address _to,
+        uint256 _tokenId,
+        bytes memory data
+    ) public virtual {
         _safeMint(_to, _tokenId, data);
     }
 }
@@ -32,7 +37,12 @@ contract MockERC721User is IERC721Receiver {
         token = _token;
     }
 
-    function onERC721Received(address, address, uint256, bytes calldata) public virtual override returns (bytes4) {
+    function onERC721Received(
+        address,
+        address,
+        uint256,
+        bytes calldata
+    ) public virtual override returns (bytes4) {
         return IERC721Receiver.onERC721Received.selector;
     }
 
@@ -40,19 +50,35 @@ contract MockERC721User is IERC721Receiver {
         token.approve(_approved, _tokenId);
     }
 
-    function setApprovalForAll(address _operator, bool _approved) public virtual {
+    function setApprovalForAll(address _operator, bool _approved)
+        public
+        virtual
+    {
         token.setApprovalForAll(_operator, _approved);
     }
 
-    function transferFrom(address from, address to, uint256 tokenId) public virtual {
+    function transferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) public virtual {
         token.transferFrom(from, to, tokenId);
     }
 
-    function safeTransferFrom(address from, address to, uint256 tokenId) public virtual {
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) public virtual {
         token.safeTransferFrom(from, to, tokenId);
     }
 
-    function safeTransferFrom(address from, address to, uint256 tokenId, bytes memory data) public {
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId,
+        bytes memory data
+    ) public {
         token.safeTransferFrom(from, to, tokenId, data);
     }
 }
@@ -63,7 +89,12 @@ contract ERC721Recipient is IERC721Receiver {
     uint256 public tokenId;
     bytes public data;
 
-    function onERC721Received(address _operator, address _from, uint256 _tokenId, bytes calldata _data) public virtual override returns (bytes4) {
+    function onERC721Received(
+        address _operator,
+        address _from,
+        uint256 _tokenId,
+        bytes calldata _data
+    ) public virtual override returns (bytes4) {
         operator = _operator;
         from = _from;
         tokenId = _tokenId;
@@ -82,7 +113,9 @@ contract ERC721Test is DSTest {
         token = new MockERC721("LetsFuckingGo!", "LFG");
     }
 
-    function testMetadata(string memory tokenName, string memory tokenSymbol) public {
+    function testMetadata(string memory tokenName, string memory tokenSymbol)
+        public
+    {
         MockERC721 sampleToken = new MockERC721(tokenName, tokenSymbol);
         assertEq(sampleToken.name(), tokenName);
         assertEq(sampleToken.symbol(), tokenSymbol);
@@ -190,7 +223,11 @@ contract ERC721Test is DSTest {
 
         mockUser.setApprovalForAll(address(this), true);
 
-        token.safeTransferFrom(address(mockUser), address(ercRecipient), tokenId);
+        token.safeTransferFrom(
+            address(mockUser),
+            address(ercRecipient),
+            tokenId
+        );
 
         assertEq(token.getApproved(tokenId), address(0));
         assertEq(token.ownerOf(tokenId), address(ercRecipient));
@@ -210,7 +247,12 @@ contract ERC721Test is DSTest {
 
         mockUser.setApprovalForAll(address(this), true);
 
-        token.safeTransferFrom(address(mockUser), address(ercRecipient), tokenId, "nft safe transfer");
+        token.safeTransferFrom(
+            address(mockUser),
+            address(ercRecipient),
+            tokenId,
+            "nft safe transfer"
+        );
 
         assertEq(token.getApproved(tokenId), address(0));
         assertEq(token.ownerOf(tokenId), address(ercRecipient));

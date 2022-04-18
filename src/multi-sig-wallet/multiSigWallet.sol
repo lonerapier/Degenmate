@@ -19,9 +19,19 @@ contract MultiSigWallet {
     Transaction[] private txs;
 
     event Deposit(address indexed sender, uint256 amount, uint256 balance);
-    event SubmitTransactionEvent(address indexed from, address indexed to, uint256 amount);
-    event ApproveTransactionEvent(address indexed owner, uint32 indexed txIndex);
-    event ExecuteTransactionEvent(address indexed owner, uint32 indexed txIndex);
+    event SubmitTransactionEvent(
+        address indexed from,
+        address indexed to,
+        uint256 amount
+    );
+    event ApproveTransactionEvent(
+        address indexed owner,
+        uint32 indexed txIndex
+    );
+    event ExecuteTransactionEvent(
+        address indexed owner,
+        uint32 indexed txIndex
+    );
     event RejectTransactionEvent(address indexed owner, uint32 indexed txIndex);
     event ExecutableTransaction(uint32 indexed txIndex);
 
@@ -42,12 +52,18 @@ contract MultiSigWallet {
     }
 
     modifier isActiveTransaction(uint32 _txId) {
-        require(txs[_txId].numRejections < numConfirmationsRequired, "rejected tx");
+        require(
+            txs[_txId].numRejections < numConfirmationsRequired,
+            "rejected tx"
+        );
         _;
     }
 
     modifier notAlreadyApprovedTransaction(uint32 _txId) {
-        require(!isApproved[_txId][msg.sender], "can't approve an already approved tx");
+        require(
+            !isApproved[_txId][msg.sender],
+            "can't approve an already approved tx"
+        );
         _;
     }
 
@@ -125,10 +141,13 @@ contract MultiSigWallet {
         notExecuted(_txId)
         returns (bool)
     {
-        require(txs[_txId].numConfirmations >= numConfirmationsRequired, "not executable");
+        require(
+            txs[_txId].numConfirmations >= numConfirmationsRequired,
+            "not executable"
+        );
 
         address payable _to = payable(txs[_txId].to);
-        (bool success, ) = _to.call{ value: txs[_txId].amount }("");
+        (bool success, ) = _to.call{value: txs[_txId].amount}("");
         if (success) {
             txs[_txId].isExecuted = true;
             emit ExecuteTransactionEvent(msg.sender, _txId);
@@ -156,6 +175,13 @@ contract MultiSigWallet {
     {
         Transaction storage txx = txs[_txId];
 
-        return (txx.to, txx.submittedBy, txx.amount, txx.numConfirmations, txx.numRejections, txx.isExecuted);
+        return (
+            txx.to,
+            txx.submittedBy,
+            txx.amount,
+            txx.numConfirmations,
+            txx.numRejections,
+            txx.isExecuted
+        );
     }
 }

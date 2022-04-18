@@ -1,13 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.10;
 
-import { DSTest } from "ds-test/test.sol";
-import { ERC20 } from "../ERC20/ERC20.sol";
-import { Cheatcodes } from "./utils/Hevm.sol";
-import { Vm } from "forge-std/Vm.sol";
+import {DSTest} from "ds-test/test.sol";
+import {ERC20} from "../ERC20/ERC20.sol";
+import {Cheatcodes} from "./utils/Hevm.sol";
+import {Vm} from "forge-std/Vm.sol";
 
 contract MockERC20 is ERC20 {
-    constructor(string memory name, string memory symbol, uint8 decimals) ERC20(name, symbol, decimals) {}
+    constructor(
+        string memory name,
+        string memory symbol,
+        uint8 decimals
+    ) ERC20(name, symbol, decimals) {}
 
     function mint(address to, uint256 totalSupply) public virtual {
         _mint(to, totalSupply);
@@ -18,27 +22,37 @@ contract MockERC20 is ERC20 {
     }
 }
 
-
 contract MockERC20User {
     ERC20 _token;
 
-    constructor (ERC20 token) {
+    constructor(ERC20 token) {
         _token = token;
     }
 
-    function transfer(address to, uint256 amount) public virtual returns (bool) {
+    function transfer(address to, uint256 amount)
+        public
+        virtual
+        returns (bool)
+    {
         return _token.transfer(to, amount);
     }
 
-    function transferFrom(address from, address to, uint256 amount) public virtual returns (bool) {
+    function transferFrom(
+        address from,
+        address to,
+        uint256 amount
+    ) public virtual returns (bool) {
         return _token.transferFrom(from, to, amount);
     }
 
-    function approve(address spender, uint256 amount) public virtual returns (bool) {
+    function approve(address spender, uint256 amount)
+        public
+        virtual
+        returns (bool)
+    {
         return _token.approve(spender, amount);
     }
 }
-
 
 contract ERC20Test is DSTest {
     Vm public constant vm = Vm(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);

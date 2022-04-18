@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.10;
+pragma solidity >=0.8.10;
 
 import "./IERC20.sol";
 
@@ -19,7 +19,11 @@ abstract contract ERC20 is IERC20 {
     uint8 public immutable decimals;
 
     // constructor
-    constructor(string memory _name, string memory _symbol, uint8 _decimals) {
+    constructor(
+        string memory _name,
+        string memory _symbol,
+        uint8 _decimals
+    ) {
         name = _name;
         symbol = _symbol;
         decimals = _decimals;
@@ -36,7 +40,11 @@ abstract contract ERC20 is IERC20 {
     /// @param _owner address who allows another address to spend _spendAmount of tokens
     /// @param _spender address who is allowed to spend _spendAmount of tokens
     /// @return allowance of spender by owner
-    function allowance(address _owner, address _spender) public view returns (uint256) {
+    function allowance(address _owner, address _spender)
+        public
+        view
+        returns (uint256)
+    {
         return _allowance[_owner][_spender];
     }
 
@@ -45,7 +53,11 @@ abstract contract ERC20 is IERC20 {
     /// @param _spender address who is allowed to spend _value of tokens
     /// @param _value amount of tokens to be spent
     /// @return true if the operation was successful
-    function approve(address _spender, uint256 _value) public virtual returns (bool) {
+    function approve(address _spender, uint256 _value)
+        public
+        virtual
+        returns (bool)
+    {
         require(_value <= balanceOf(msg.sender), "insufficient balance");
 
         _allowance[msg.sender][_spender] = _value;
@@ -60,7 +72,11 @@ abstract contract ERC20 is IERC20 {
     /// @param _to address to transfer tokens to
     /// @param _value amount of tokens to be transferred
     /// @return true if the operation was successful
-    function transfer(address _to, uint256 _value) public virtual returns (bool) {
+    function transfer(address _to, uint256 _value)
+        public
+        virtual
+        returns (bool)
+    {
         _transfer(msg.sender, _to, _value);
 
         return true;
@@ -72,7 +88,11 @@ abstract contract ERC20 is IERC20 {
     /// @param _to address to transfer tokens to
     /// @param _value amount of tokens to be transferred
     /// @return true if the operation was successful
-    function transferFrom(address _from, address _to, uint256 _value) public virtual returns (bool) {
+    function transferFrom(
+        address _from,
+        address _to,
+        uint256 _value
+    ) public virtual returns (bool) {
         uint256 allowed = allowance(_from, msg.sender);
 
         require(_value <= allowed, "insufficient allowance");
@@ -91,7 +111,11 @@ abstract contract ERC20 is IERC20 {
     /// @param _from address to transfer tokens from
     /// @param _to address to transfer tokens to
     /// @param _value amount of tokens to be transferred
-    function _transfer(address _from, address _to, uint256 _value) internal {
+    function _transfer(
+        address _from,
+        address _to,
+        uint256 _value
+    ) internal {
         require(_to != address(0), "invalid receiver");
         require(_value > 0, "invalid amount");
 
