@@ -1,10 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.10;
+pragma solidity >=0.8.10;
 
-import {DSTest} from "ds-test/test.sol";
 import {ERC20} from "../ERC20/ERC20.sol";
-import {Cheatcodes} from "./utils/Hevm.sol";
-import {Vm} from "forge-std/Vm.sol";
+import {DSTestPlus} from "./utils/DSTestPlus.sol";
 
 contract MockERC20 is ERC20 {
     constructor(
@@ -54,9 +52,7 @@ contract MockERC20User {
     }
 }
 
-contract ERC20Test is DSTest {
-    Vm public constant vm = Vm(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);
-
+contract ERC20Test is DSTestPlus {
     MockERC20 token;
     address constant sampleAdd = address(0xABC);
 

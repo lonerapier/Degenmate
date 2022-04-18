@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
 
-import {DSTest} from "ds-test/test.sol";
+import {DSTestPlus} from "./utils/DSTestPlus.sol";
+
 import {ERC721, IERC721Receiver} from "../ERC721/ERC721.sol";
 
 contract MockERC721 is ERC721 {
@@ -104,7 +105,7 @@ contract ERC721Recipient is IERC721Receiver {
     }
 }
 
-contract ERC721Test is DSTest {
+contract ERC721Test is DSTestPlus {
     MockERC721 token;
     address constant sampleAdd = address(0xABC);
     uint256 constant tokenId = 786;
@@ -131,6 +132,7 @@ contract ERC721Test is DSTest {
     // @dev this should fail as msg.sender is not owner or approved
     function testBurn() public {
         token.mint(sampleAdd, tokenId);
+        vm.prank(sampleAdd);
         token.burn(tokenId);
 
         assertEq(token.balanceOf(sampleAdd), 0);

@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.10;
+pragma solidity >=0.8.10;
 
-import {DSTest} from "ds-test/test.sol";
 import {ERC20Permit} from "../ERC20/ERC20Permit.sol";
-import {Vm} from "forge-std/Vm.sol";
+import {DSTestPlus} from "./utils/DSTestPlus.sol";
 
 contract MockERC20Permit is ERC20Permit {
     constructor(
@@ -21,15 +20,13 @@ contract MockERC20Permit is ERC20Permit {
     }
 }
 
-contract ERC20PermitTest is DSTest {
+contract ERC20PermitTest is DSTestPlus {
     MockERC20Permit token;
     address public constant sampleAdd = address(0xABC);
     bytes32 public constant permitTypehash =
         keccak256(
             "Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)"
         );
-
-    Vm public constant vm = Vm(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);
 
     function setUp() public {
         token = new MockERC20Permit("Mock", "MOCK", 18);
@@ -236,14 +233,13 @@ contract ERC20PermitTest is DSTest {
     }
 
     function testFuzzPermit(
-        uint256 privateKey,
         address to,
         uint256 value,
         uint256 deadline
     ) public {
-        if (privateKey == 0) privateKey = 1;
         if (deadline < block.timestamp) deadline = block.timestamp;
 
+        uint256 privateKey = uint256(0xbabe);
         address owner = vm.addr(privateKey);
 
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(
