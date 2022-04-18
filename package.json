@@ -1,0 +1,27 @@
+{
+    "name": "ps",
+    "description": "Contracts containing solidity and evm learning",
+    "author": "Sambhav Dusad <sambhavdusad24@gmail.com>",
+    "license": "AGPL-3.0-only",
+    "version": "1.0.0",
+    "files": [
+        "src/**/*.sol"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dsam82/ps.git"
+    },
+    "devDependencies": {
+        "husky": "^7.0.0",
+        "prettier": "^2.6.2",
+        "prettier-plugin-solidity": "^1.0.0-beta.13"
+    },
+    "scripts": {
+        "setup": "make clean && make build",
+        "sync": "make update",
+        "test": "make test",
+        "snapshot": "make snapshot",
+        "lint": "make lint",
+        "prepare": "husky install"
+    }
+}
