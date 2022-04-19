@@ -9,7 +9,7 @@ abstract contract ERC1155 is IERC1155 {
     error InvalidLength();
     error InsufficientBalance();
     error Unauthorised();
-    error UnsafeReceipient();
+    error UnsafeRecipient();
 
     // ================= Storage =================
 
@@ -80,7 +80,7 @@ abstract contract ERC1155 is IERC1155 {
                     _value,
                     _data
                 ) != IERC1155Receiver.onERC1155Received.selector
-        ) revert UnsafeReceipient();
+        ) revert UnsafeRecipient();
     }
 
     function safeBatchTransferFrom(
@@ -118,8 +118,8 @@ abstract contract ERC1155 is IERC1155 {
                     _ids,
                     _values,
                     _data
-                ) == IERC1155Receiver.onERC1155BatchReceived.selector
-        ) revert UnsafeReceipient();
+                ) != IERC1155Receiver.onERC1155BatchReceived.selector
+        ) revert UnsafeRecipient();
     }
 
     function supportsInterface(bytes4 interfaceId)
@@ -158,7 +158,7 @@ abstract contract ERC1155 is IERC1155 {
                     _value,
                     _data
                 ) != IERC1155Receiver.onERC1155Received.selector
-        ) revert UnsafeReceipient();
+        ) revert UnsafeRecipient();
     }
 
     function _batchMint(
@@ -188,8 +188,8 @@ abstract contract ERC1155 is IERC1155 {
                     _ids,
                     _values,
                     _data
-                ) == IERC1155Receiver.onERC1155BatchReceived.selector
-        ) revert UnsafeReceipient();
+                ) != IERC1155Receiver.onERC1155BatchReceived.selector
+        ) revert UnsafeRecipient();
     }
 
     function _burn(uint256 _id, uint256 _value) internal virtual {
