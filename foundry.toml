@@ -20,8 +20,10 @@ remappings = [
   'solmate/=lib/solmate/src/',
   'ds-test/=lib/ds-test/src/',
   'forge-std/=lib/forge-std/src/',
+  '@unifap-v2/=lib/unifap-v2/src/',
+  'sol-tuts/=lib/sol-tuts/src/',
 ]
 
 # Extreme Fuzzing CI Profile :P
 [ci]
-fuzz_runs = 1_000
+fuzz_runs = 10_000
