@@ -13,3 +13,6 @@
 [submodule "lib/unifap-v2"]
 	path = lib/unifap-v2
 	url = https://github.com/dsam82/unifap-v2
+[submodule "lib/sol-tuts"]
+	path = lib/sol-tuts
+	url = https://github.com/dsam82/sol-tuts
