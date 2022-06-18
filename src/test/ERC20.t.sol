@@ -2,23 +2,9 @@
 pragma solidity >=0.8.10;
 
 import {ERC20} from "../ERC20/ERC20.sol";
+import {MockERC20} from "./mocks/MockERC20.sol";
 import {DSTestPlus} from "./utils/DSTestPlus.sol";
 
-contract MockERC20 is ERC20 {
-    constructor(
-        string memory name,
-        string memory symbol,
-        uint8 decimals
-    ) ERC20(name, symbol, decimals) {}
-
-    function mint(address to, uint256 totalSupply) public virtual {
-        _mint(to, totalSupply);
-    }
-
-    function burn(uint256 amount) public virtual {
-        _burn(amount);
-    }
-}
 
 contract MockERC20User {
     ERC20 _token;
