@@ -6,8 +6,7 @@
 [default]
 # Sets the concrete solc version to use
 # This overrides the `auto_detect_solc` value
-solc_version = '0.8.12'
-auto_detect_solc = false
+auto_detect_solc = true
 block_timestamp = 100_000_000
 # Increase optimizer_runs
 optimizer = true
@@ -16,10 +15,9 @@ optimizer_runs = 1_000
 fuzz_runs = 1_000
 # Configure remappings
 remappings = [
-  '@openzeppelin/=lib/openzeppelin-contracts/',
   'solmate/=lib/solmate/src/',
   'ds-test/=lib/ds-test/src/',
-  'forge-std/=lib/forge-std/src/',
+  'std/=lib/forge-std/src/',
   '@unifap-v2/=lib/unifap-v2/src/',
   'sol-tuts/=lib/sol-tuts/src/',
 ]
