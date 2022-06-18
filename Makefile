@@ -23,13 +23,13 @@ build  :; forge clean && forge build --optimize --optimize-runs 1000000
 scripts :; chmod +x ./scripts/*
 
 # Tests
-test   :; forge clean && forge test --optimize --optimize-runs 1000000 -v # --ffi # enable if you need the `ffi` cheat code on HEVM
+test   :; forge clean && forge test --optimize --optimizer-runs 1000000 -v # --ffi # enable if you need the `ffi` cheat code on HEVM
 
 # Lints
 lint :; npx prettier --write src/
 
 # Generate Gas Snapshots
-snapshot :; forge clean && forge snapshot --optimize --optimize-runs 1000000
+snapshot :; forge clean && forge snapshot --optimize --optimizer-runs 1000000
 
 # Rename all instances of femplate with the new repo name
 rename :; chmod +x ./scripts/* && ./scripts/rename.sh

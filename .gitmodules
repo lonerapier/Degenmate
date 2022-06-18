@@ -13,3 +13,6 @@
 [submodule "lib/sol-tuts"]
 	path = lib/sol-tuts
 	url = https://github.com/dsam82/sol-tuts
+[submodule "lib/openzeppelin-contracts"]
+	path = lib/openzeppelin-contracts
+	url = https://github.com/openzeppelin/openzeppelin-contracts
