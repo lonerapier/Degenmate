@@ -5,7 +5,6 @@ import {ERC20} from "../ERC20/ERC20.sol";
 import {MockERC20} from "./mocks/MockERC20.sol";
 import {DSTestPlus} from "./utils/DSTestPlus.sol";
 
-
 contract MockERC20User {
     ERC20 _token;
 
