@@ -8,7 +8,8 @@ Please do not use this in **production**.
 
 ## Degen Implemetations
 
-- [DegenERC20](src/ERC20/DegenERC20.sol): Assembly implementations of ERC20 standard
+- [DegenERC20](src/ERC20/DegenERC20.sol): Assembly implementation of ERC20 standard
+- [DegenERC721](src/ERC721/DegenERC721.sol): Assembly implementation of ERC721 standard
 
 ## Other implementations
 
