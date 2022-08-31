@@ -18,6 +18,7 @@ Please do not use this in **production**.
 - [ERC721Enumerable](src/ERC721/ERC721Enumerable.sol)
 - [ERC20Permit](src/ERC20/ERC20Permit.sol)
 - [ERC1155](src/ERC1155/ERC1155.sol)
+- [ERC4626](src/ERC4626/ERC4626.sol)
 - [RPS Game](https://github.com/dsam82/rps)
 - [UniswapV2](https://github.com/dsam82/unifap-v2)
 - [Simple Registry](https://github.com/dsam82/sol-tuts/blob/master/src/Registry.sol)

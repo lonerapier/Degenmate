@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.14;
 
-contract DegenERC721 is IERC165, IERC721, IERC721Metadata {
+import "@openzeppelin/contracts/interfaces/IERC165.sol";
+
+contract DegenERC721 is IERC165 {
 
     // ============= Metadata variables =============
 
@@ -20,9 +22,9 @@ contract DegenERC721 is IERC165, IERC721, IERC721Metadata {
 
     // ============= Constructor =============
 
-    constructor(string memory name, string memory symbol) {
-        _name = name;
-        _symbol = symbol;
+    constructor(string memory __name, string memory __symbol) {
+        _name = __name;
+        _symbol = __symbol;
     }
 
     /// @notice Get the name of the token.
@@ -140,7 +142,7 @@ contract DegenERC721 is IERC165, IERC721, IERC721Metadata {
     }
 
     /// @notice Get token URI
-    function tokenURI(uint256 tokenId) public pure virtual returns (string memory) {
+    function tokenURI(uint256) public pure virtual returns (string memory) {
         return "";
     }
 
@@ -168,9 +170,9 @@ contract DegenERC721 is IERC165, IERC721, IERC721Metadata {
             mstore(0, _owner)
             mstore(32, _balances.slot)
 
-            let balance := sload(keccak256(0, 64))
+            let ownerBalance := sload(keccak256(0, 64))
 
-            mstore(0x40, balance)
+            mstore(0x40, ownerBalance)
 
             return(0x40, 32)
         }
@@ -178,7 +180,7 @@ contract DegenERC721 is IERC165, IERC721, IERC721Metadata {
 
     /// @notice support ERC165 logic
     /// @param _interfaceId The interface ID.
-    /// @return True if the interface is supported.
+    /// @return result True if the interface is supported.
     function supportsInterface(bytes4 _interfaceId) public pure returns (bool result) {
         assembly {
             result := or(
@@ -194,7 +196,7 @@ contract DegenERC721 is IERC165, IERC721, IERC721Metadata {
     /// @notice get the approved address for the token
     /// @param _tokenId The token ID.
     /// @return The approved address.
-    function getApproved(uint256 _tokenId) public view virtual override returns(address) {
+    function getApproved(uint256 _tokenId) public view virtual  returns(address) {
         assembly {
             mstore(0, _tokenId)
             mstore(32, _approvals.slot)
@@ -211,7 +213,7 @@ contract DegenERC721 is IERC165, IERC721, IERC721Metadata {
     /// @param _owner The owner address.
     /// @param _operator The operator address.
     /// @return True if the operator is approved for all tokens of the owner.
-    function isApprovedForAll(address _owner, address _operator) public view virtual override returns (bool) {
+    function isApprovedForAll(address _owner, address _operator) public view virtual  returns (bool) {
         assembly {
             mstore(0, _owner)
             mstore(32, _isApprovedForAll.slot)
@@ -232,37 +234,39 @@ contract DegenERC721 is IERC165, IERC721, IERC721Metadata {
     /// @notice set approval of operator for all tokens of the owner
     /// @param _operator The operator address.
     /// @param _approved flag to toggle
-    function setApprovalForAll(address _operator, bool _approved) public virtual override {
-        if iszero(_operator) {
-            // error InvalidAddress()
-            mstore(0, 0xabcd)
-            return(28, 4)
+    function setApprovalForAll(address _operator, bool _approved) public virtual {
+        assembly {
+            if iszero(_operator) {
+                // error InvalidAddress()
+                mstore(0, 0xabcd)
+                return(28, 4)
+            }
+
+            if eq(_operator, caller()) {
+                // error SelfApproval()
+                mstore(0, 0xabcd)
+                return(28, 4)
+            }
+
+            mstore(0, caller())
+            mstore(32, _isApprovedForAll.slot)
+
+            let ownerCont := keccak256(0, 64)
+
+            mstore(0, _operator)
+            mstore(32, ownerCont)
+
+            let operatorCont := keccak256(0, 64)
+
+            sstore(operatorCont, _approved)
         }
-
-        if eq(_operator, caller()) {
-            // error SelfApproval()
-            mstore(0, 0xabcd)
-            return(28, 4)
-        }
-
-        mstore(0, _owner)
-        mstore(32, _isApprovedForAll.slot)
-
-        let ownerCont := keccak256(0, 64)
-
-        mstore(0, _operator)
-        mstore(32, ownerCont)
-
-        let operatorCont := keccak256(0, 64)
-
-        sstore(operatorCont, _approved)
     }
 
     /// @notice approve operator for the token
     /// @dev emit Approval event
     /// @param _operator The operator address.
     /// @param _tokenId The token ID.
-    function approve(address _operator, uint256 _tokenId) public virtual override {
+    function approve(address _operator, uint256 _tokenId) public virtual {
         assembly {
             if iszero(_operator) {
                 // error InvalidAddress()
@@ -283,7 +287,7 @@ contract DegenERC721 is IERC165, IERC721, IERC721Metadata {
             let approved := sload(keccak256(0, 64))
 
             // find isApprovedForAll of the token
-            mstore(0, _owner)
+            mstore(0, caller())
             mstore(32, _isApprovedForAll.slot)
 
             let ownerCont := keccak256(0, 64)
@@ -316,10 +320,9 @@ contract DegenERC721 is IERC165, IERC721, IERC721Metadata {
             sstore(approvedSlot, _operator)
 
             // emit Approval event
-            let
-                approveSigHash
-            := 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925
-            log4(0, 0, approveSigHash, caller(), spender, _tokenId)
+            let approveSigHash :=
+            0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925
+            log4(0, 0, approveSigHash, caller(), _operator, _tokenId)
         }
     }
 
@@ -327,7 +330,7 @@ contract DegenERC721 is IERC165, IERC721, IERC721Metadata {
     /// @dev emit Transfer event
     /// @param _to The new owner address.
     /// @param _tokenId The token ID.
-    function transfer(address _to, uint256 _tokenId) public virtual override {
+    function transfer(address _to, uint256 _tokenId) public virtual {
         assembly {
             // find owner of the token
             mstore(0, _tokenId)
@@ -377,8 +380,8 @@ contract DegenERC721 is IERC165, IERC721, IERC721Metadata {
             sstore(keccak256(0, 64), 0)
 
             // emit Transfer event
-            let
-                transferSigHash := 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
+            let transferSigHash :=
+            0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
             log4(0, 0, transferSigHash, owner, _to, _tokenId)
         }
     }
@@ -388,7 +391,7 @@ contract DegenERC721 is IERC165, IERC721, IERC721Metadata {
     /// @param _from The previous owner address.
     /// @param _to The new owner address.
     /// @param _tokenId The token ID.
-    function transferFrom(address _from, address _to, uint256 _tokenId) public virtual override {
+    function transferFrom(address _from, address _to, uint256 _tokenId) public virtual {
         assembly {
             // find owner of the token
             mstore(0, _tokenId)
@@ -410,7 +413,7 @@ contract DegenERC721 is IERC165, IERC721, IERC721Metadata {
             let approved := sload(keccak256(0, 64))
 
             // find isApprovedForAll of the token
-            mstore(0, _owner)
+            mstore(0, caller())
             mstore(32, _isApprovedForAll.slot)
 
             let ownerCont := keccak256(0, 64)
@@ -498,8 +501,8 @@ contract DegenERC721 is IERC165, IERC721, IERC721Metadata {
             sstore(keccak256(0, 64), _to)
 
             // emit Transfer event
-            let
-                transferSigHash := 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
+            let transferSigHash :=
+            0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
             log4(0, 0, transferSigHash, 0, _to, _tokenId)
         }
     }
@@ -543,8 +546,8 @@ contract DegenERC721 is IERC165, IERC721, IERC721Metadata {
             sstore(keccak256(0, 64), 0)
 
             // emit Transfer event
-            let
-                transferSigHash := 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
+            let transferSigHash :=
+            0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
             log4(0, 0, transferSigHash, owner, 0, _tokenId)
         }
     }

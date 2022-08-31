@@ -2,34 +2,9 @@
 pragma solidity >=0.8.0;
 
 import {DSTestPlus} from "./utils/DSTestPlus.sol";
-
+import {MockERC721} from "./mocks/MockERC721.sol";
 import {ERC721, IERC721Receiver} from "../ERC721/ERC721.sol";
 
-contract MockERC721 is ERC721 {
-    constructor(string memory _name, string memory _symbol)
-        ERC721(_name, _symbol)
-    {}
-
-    function mint(address _to, uint256 _tokenId) public virtual {
-        _mint(_to, _tokenId);
-    }
-
-    function burn(uint256 _tokenId) public virtual {
-        _burn(_tokenId);
-    }
-
-    function safeMint(address _to, uint256 _tokenId) public virtual {
-        _safeMint(_to, _tokenId);
-    }
-
-    function safeMint(
-        address _to,
-        uint256 _tokenId,
-        bytes memory data
-    ) public virtual {
-        _safeMint(_to, _tokenId, data);
-    }
-}
 
 contract MockERC721User is IERC721Receiver {
     ERC721 token;
